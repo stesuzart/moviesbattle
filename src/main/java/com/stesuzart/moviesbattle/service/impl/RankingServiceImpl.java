@@ -21,7 +21,6 @@ public class RankingServiceImpl implements RankingService {
 
     @Override
     public Ranking saveRanking(Long userId, Integer score) {
-
         return rankingRepository.save(new Ranking(userId, score));
     }
 }
