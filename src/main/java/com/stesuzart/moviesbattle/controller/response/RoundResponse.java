@@ -1,4 +1,4 @@
 package com.stesuzart.moviesbattle.controller.response;
 
-public record RoundResponse(String id, String title) {
+public record RoundResponse(String movieId, String title) {
 }

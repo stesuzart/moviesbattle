@@ -56,8 +56,8 @@ public class GameServiceImpl implements GameService {
     @Override
     public List<RoundResponse> nextQuiz(String gameId, NextQuizRequest request) {
         Game game = gameRepository.findById(gameId).orElseThrow(GameNotFoundException::new);;
-        Movie movieWinner = movieService.getMovie(request.movieWinner());
-        Movie movieLoser = movieService.getMovie(request.movieLoser());
+        Movie movieWinner = movieService.getMovie(request.movieWinnerId());
+        Movie movieLoser = movieService.getMovie(request.movieLoserId());
 
         finishPreviousRound(movieWinner, movieLoser, game);
         Pair<Movie, Movie> pairMovies = generatePairMovies(game);

@@ -75,8 +75,8 @@ public class GameControllerTest {
         var response = this.mockMvc.perform(request);
 
         response.andExpect(status().isOk())
-                .andExpect(jsonPath("$.[0].id", equalTo(rounds.get(0).id())))
-                .andExpect(jsonPath("$.[1].id", equalTo(rounds.get(1).id())));
+                .andExpect(jsonPath("$.[0].movieId", equalTo(rounds.get(0).movieId())))
+                .andExpect(jsonPath("$.[1].movieId", equalTo(rounds.get(1).movieId())));
 
         verify(gameService, times(1)).nextQuiz(any(), any());
     }

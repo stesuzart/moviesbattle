@@ -6,25 +6,19 @@ import com.stesuzart.moviesbattle.controller.response.GameResponse;
 import com.stesuzart.moviesbattle.controller.response.RoundResponse;
 import com.stesuzart.moviesbattle.entity.Game;
 import com.stesuzart.moviesbattle.entity.Movie;
-import com.stesuzart.moviesbattle.entity.PairMoviesId;
-import com.stesuzart.moviesbattle.entity.Round;
-import com.stesuzart.moviesbattle.entity.RoundStatus;
 import com.stesuzart.moviesbattle.entity.User;
 import com.stesuzart.moviesbattle.exceptions.GameOverException;
 import com.stesuzart.moviesbattle.repository.GameRepository;
 import com.stesuzart.moviesbattle.service.impl.GameServiceImpl;
-import com.stesuzart.moviesbattle.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.AdditionalAnswers;
-import org.mockito.Answers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.util.Pair;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 import java.util.Objects;
@@ -69,8 +63,8 @@ public class GameServiceTest {
         Assertions.assertNotNull(gameResponse);
         Assertions.assertNotNull(gameResponse.id());
         Assertions.assertEquals(2, gameResponse.round().size());
-        Assertions.assertEquals(movies.getFirst().getId(), gameResponse.round().get(0).id());
-        Assertions.assertEquals(movies.getSecond().getId(), gameResponse.round().get(1).id());
+        Assertions.assertEquals(movies.getFirst().getId(), gameResponse.round().get(0).movieId());
+        Assertions.assertEquals(movies.getSecond().getId(), gameResponse.round().get(1).movieId());
 
         Mockito.verify(gameRepository, times(1)).save(argThat(game ->
                 Objects.nonNull(game.getId())
@@ -95,9 +89,9 @@ public class GameServiceTest {
 
         when(gameRepository.findById(any()))
                 .thenReturn(Optional.of(game));
-        when(movieService.getMovie(request.movieWinner()))
+        when(movieService.getMovie(request.movieWinnerId()))
                 .thenReturn(oldMovies.getFirst());
-        when(movieService.getMovie(request.movieLoser()))
+        when(movieService.getMovie(request.movieLoserId()))
                 .thenReturn(oldMovies.getSecond());
         when(movieService.getPairMovie())
                 .thenReturn(oldMovies).thenReturn(newMovies);
@@ -106,8 +100,8 @@ public class GameServiceTest {
 
         Assertions.assertNotNull(roundResponses);
         Assertions.assertEquals(2, roundResponses.size());
-        Assertions.assertEquals(newMovies.getFirst().getId(), roundResponses.get(0).id());
-        Assertions.assertEquals(newMovies.getSecond().getId(), roundResponses.get(1).id());
+        Assertions.assertEquals(newMovies.getFirst().getId(), roundResponses.get(0).movieId());
+        Assertions.assertEquals(newMovies.getSecond().getId(), roundResponses.get(1).movieId());
 
         Mockito.verify(gameRepository, times(1)).save(argThat(gameArg ->
                 Objects.nonNull(gameArg.getId())
@@ -133,9 +127,9 @@ public class GameServiceTest {
 
         when(gameRepository.findById(any()))
                 .thenReturn(Optional.of(game));
-        when(movieService.getMovie(request.movieLoser()))
+        when(movieService.getMovie(request.movieLoserId()))
                 .thenReturn(oldMovies.getFirst());
-        when(movieService.getMovie(request.movieWinner()))
+        when(movieService.getMovie(request.movieWinnerId()))
                 .thenReturn(oldMovies.getSecond());
 
         Assertions.assertThrows(GameOverException.class, () -> gameService.nextQuiz(game.getId(), request));
