@@ -4,8 +4,12 @@ import com.stesuzart.moviesbattle.controller.request.NextQuizRequest;
 import com.stesuzart.moviesbattle.controller.response.GameResponse;
 import com.stesuzart.moviesbattle.controller.response.RoundResponse;
 import com.stesuzart.moviesbattle.service.GameService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-
+@OpenAPIDefinition(info = @Info(title = "Movies Battle API"))
 @RestController
 public class GameController {
 
@@ -40,6 +44,7 @@ public class GameController {
             )
         }
     )
+    @Parameter(name = "Authorization", in = ParameterIn.HEADER, required = true, example = " Basic {token}")
     @PostMapping("/game/start")
     public ResponseEntity<?> createGame(){
         GameResponse game = gameService.createGame();
@@ -63,9 +68,15 @@ public class GameController {
             @ApiResponse(
                 responseCode = "404",
                 description = "The round was not found"
+            ),
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Game Over - The user has reached the maximum number of errors."
             )
+
         }
     )
+    @Parameter(name = "Authorization", in = ParameterIn.HEADER, required = true, example = " Basic {token}")
     @PostMapping("/game/{id}/quiz")
     public ResponseEntity<?> nextQuiz(
             @Parameter(description = "gameId", required = true)  @PathVariable String id,
