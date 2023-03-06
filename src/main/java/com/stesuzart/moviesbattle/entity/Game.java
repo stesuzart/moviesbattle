@@ -1,11 +1,7 @@
 package com.stesuzart.moviesbattle.entity;
 
-import lombok.Data;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -26,8 +22,10 @@ public class Game {
     private List<Round> rounds;
     @Column(name = "player_id", nullable = false)
     private Long playerId;
+
     public Game() {
     }
+
     public Game(Long playerId) {
         this.id = UUID.randomUUID().toString();
         this.score = 0;

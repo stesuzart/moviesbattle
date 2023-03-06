@@ -23,7 +23,7 @@ public class ExceptionHandlerAdvice {
 
     @ExceptionHandler(value = GameOverException.class)
     public ResponseEntity<?> handleGameOverException(final GameOverException ex) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.OK).body(ex.getMessage());
     }
 
 }
